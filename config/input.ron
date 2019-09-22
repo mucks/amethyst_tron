@@ -1,0 +1,25 @@
+/*!
+    @import /amethyst_input/src/bindings.rs#Bindings, StringBindings
+    Bindings<StringBindings>
+*/
+
+(
+    axes: {
+        "move_x": Emulated(
+            pos: Key(E),
+            neg: Key(A),
+        ),
+        "move_y": Emulated(
+            pos: Key(P),
+            neg: Key(Semicolon),
+        ),
+        "move_z": Emulated(
+            pos: Key(O),
+            neg: Key(Comma),
+        ),
+    },
+    actions: {
+        "left_click": [[Key(Apostrophe)]],
+        "right_click": [[Key(J)]],
+    },
+)

@@ -1,0 +1,9 @@
+[package]
+name = "tron"
+version = "0.1.0"
+authors = []
+edition = "2018"
+
+[dependencies.amethyst]
+amethyst = "0.12.0"
+features = ["vulkan"]
