@@ -10,7 +10,7 @@ use amethyst::{
         plugins::{RenderShaded3D, RenderToWindow},
         rendy::mesh::{Normal, Position, TexCoord},
         types::DefaultBackend,
-        RenderingBundle,
+        RenderDebugLines, RenderingBundle,
     },
     utils::{application_root_dir, scene::BasicScenePrefab},
 };
@@ -18,6 +18,7 @@ use amethyst::{
 use std::time::Duration;
 
 mod components;
+mod enums;
 mod systems;
 mod tron;
 
@@ -45,7 +46,7 @@ fn main() -> amethyst::Result<()> {
             )
             .with_sensitivity(0.1, 0.1),
         )?
-        .with_bundle(TransformBundle::new().with_dep(&["fly_movement"]))?
+        .with_bundle(TransformBundle::new())?
         .with_bundle(
             InputBundle::<StringBindings>::new().with_bindings_from_file(&key_bindings_path)?,
         )?
@@ -55,9 +56,19 @@ fn main() -> amethyst::Result<()> {
                     RenderToWindow::from_config_path(display_config_path)
                         .with_clear([0.0, 0.0, 0.0, 1.0]),
                 )
+                .with_plugin(RenderDebugLines::default())
                 .with_plugin(RenderShaded3D::default()),
         )?
-        .with(systems::PlayerMoveSystem, "player_move_system", &[]);
+        .with(
+            systems::PlayerMoveSystem,
+            "player_move_system",
+            &["input_system"],
+        )
+        .with(
+            systems::TrailSystem,
+            "trail_system",
+            &["player_move_system"],
+        );
 
     let mut game = Application::build(assets_dir, Tron::default())?
         .with_frame_limit(

@@ -5,13 +5,13 @@ Prefab (
         (
             data: (
                 graphics: (
-                    mesh: Asset(File("mesh/player.obj", ("OBJ", ()))),
+                    mesh: Asset(File("mesh/cube.obj", ("OBJ", ()))),
                     material: (
-                        albedo: Generate(Srgba(0.0, 0.0, 1.0, 1.0))
+                        albedo: Generate(Srgba(0.0, 1.0, 0.0, 1.0))
                     )
                 ),
                 transform: (
-                    scale: (0.2, 0.2, 0.2),
+                    scale: (0.1, 0.1, 0.1),
                 )
             )
         ),

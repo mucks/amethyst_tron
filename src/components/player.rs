@@ -1,51 +1,20 @@
+use amethyst::{
+    assets::{PrefabLoader, RonFormat},
+    core::components::Transform,
+    core::math::Vector3,
+    ecs::{Component, DenseVecStorage, Entity},
+    prelude::*,
+};
+
+use crate::enums::Direction;
 use crate::MyPrefabData;
-use amethyst::assets::{PrefabLoader, RonFormat};
-use amethyst::core::Transform;
-use amethyst::ecs::{Component, DenseVecStorage};
-use amethyst::prelude::*;
-
-pub enum MoveEvent {
-    LeftClick,
-    RightClick,
-}
-
-pub enum Direction {
-    Forward,  //z--
-    Backward, //z++
-    Left,     //x--
-    Right,    //x++
-}
-
-impl Direction {
-    pub fn apply_move_event(&self, move_event: MoveEvent) -> Direction {
-        use Direction::*;
-        use MoveEvent::*;
-
-        match &self {
-            Forward => match move_event {
-                LeftClick => Left,
-                RightClick => Right,
-            },
-            Backward => match move_event {
-                LeftClick => Right,
-                RightClick => Left,
-            },
-            Left => match move_event {
-                LeftClick => Forward,
-                RightClick => Backward,
-            },
-            Right => match move_event {
-                LeftClick => Backward,
-                RightClick => Forward,
-            },
-        }
-    }
-}
 
 pub struct Player {
     pub direction: Direction,
     pub left_click_lock: bool,
     pub right_click_lock: bool,
+    pub direction_change_positions: Vec<(Vector3<f32>, bool)>,
+    pub move_count: usize,
 }
 
 impl Player {
@@ -54,6 +23,8 @@ impl Player {
             direction: Direction::Forward,
             left_click_lock: false,
             right_click_lock: false,
+            direction_change_positions: Vec::new(),
+            move_count: 0,
         }
     }
 }
@@ -63,14 +34,24 @@ impl Component for Player {
 }
 
 impl Player {
-    pub fn init(world: &mut World) {
+    pub fn init(world: &mut World) -> Entity {
         let handle = world.exec(|loader: PrefabLoader<'_, MyPrefabData>| {
             loader.load("prefab/player.ron", RonFormat, ())
         });
+
+        let mut transform = Transform::default();
+        transform.set_translation_xyz(0.0, 0.2, 0.0);
+
+        let mut player = Player::new();
+        player
+            .direction_change_positions
+            .push((transform.translation().clone(), false));
+
         world
             .create_entity()
             .with(handle)
-            .with(Player::new())
-            .build();
+            .with(player)
+            .with(transform)
+            .build()
     }
 }

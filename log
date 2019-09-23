@@ -1,0 +1,22 @@
+{
+	"resource": "/home/shnaky/projects/tron/src/systems/player_move.rs",
+	"owner": "rust",
+	"code": "E0308",
+	"severity": 8,
+	"message": "mismatched types\n\nexpected struct `specs::storage::Storage`, found struct `std::vec::Vec`\n\nnote: expected type `&mut specs::storage::Storage<'_, amethyst_assets::storage::Handle<amethyst_assets::prefab::Prefab<amethyst_utils::scene::BasicScenePrefab<(std::vec::Vec<rendy_util::types::vertex::Position>, std::vec::Vec<rendy_util::types::vertex::Normal>, std::vec::Vec<rendy_util::types::vertex::TexCoord>)>>>, shred::res::FetchMut<'_, specs::storage::MaskedStorage<amethyst_assets::storage::Handle<amethyst_assets::prefab::Prefab<amethyst_utils::scene::BasicScenePrefab<(std::vec::Vec<rendy_util::types::vertex::Position>, std::vec::Vec<rendy_util::types::vertex::Normal>, std::vec::Vec<rendy_util::types::vertex::TexCoord>)>>>>>>`\n         found type `&mut std::vec::Vec<_>`",
+	"source": "rustc",
+	"startLineNumber": 41,
+	"startColumn": 58,
+	"endLineNumber": 41,
+	"endColumn": 70,
+	"relatedInformation": [
+		{
+			"startLineNumber": 41,
+			"startColumn": 58,
+			"endLineNumber": 41,
+			"endColumn": 70,
+			"message": "expected struct `specs::storage::Storage`, found struct `std::vec::Vec`",
+			"resource": "/home/shnaky/projects/tron/src/systems/player_move.rs"
+		}
+	]
+}
