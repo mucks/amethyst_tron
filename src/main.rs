@@ -48,7 +48,6 @@ fn main() -> amethyst::Result<()> {
             )
             .with_sensitivity(0.1, 0.1),
         )?
-        .with_bundle(TransformBundle::new().with_dep(&["fly_movement"]))?
         .with(PrefabLoaderSystem::<MyPrefabData>::default(), "", &[])
         .with(
             PrefabLoaderSystem::<prefabs::GltfScenePrefabData>::default(),
@@ -60,6 +59,7 @@ fn main() -> amethyst::Result<()> {
             "gltf_loader",
             &["scene_loader"], // This is important so that entity instantiation is performed in a single frame.
         )
+        .with_bundle(TransformBundle::new().with_dep(&["fly_movement"]))?
         .with_bundle(
             InputBundle::<StringBindings>::new().with_bindings_from_file(&key_bindings_path)?,
         )?

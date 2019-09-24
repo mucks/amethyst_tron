@@ -21,12 +21,13 @@ impl<'s> System<'s> for TrailSystem {
         WriteStorage<'s, Player>,
         PrefabLoader<'s, GltfScenePrefabData>,
         WriteStorage<'s, Handle<Prefab<GltfScenePrefabData>>>,
+        Write<'s, LazyUpdate>,
         Entities<'s>,
     );
 
     fn run(
         &mut self,
-        (mut cubes, mut transforms, mut players, loader, mut handles, entities): Self::SystemData,
+        (mut cubes, mut transforms, mut players, loader, mut handles, lazy_update, entities): Self::SystemData,
     ) {
         for player in (&mut players).join() {
             for (pos, has_cube) in player.direction_change_positions.iter_mut() {

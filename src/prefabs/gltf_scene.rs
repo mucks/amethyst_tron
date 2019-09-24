@@ -3,18 +3,12 @@ use amethyst::{
         AssetPrefab, AssetStorage, Handle, Prefab, PrefabData, PrefabLoader, PrefabLoaderSystem,
         ProgressCounter, RonFormat,
     },
-    core::{
-        math::Vector3,
-        transform::Transform,
-        {Named, Parent},
-    },
     derive::PrefabData,
     ecs::{
         storage::DenseVecStorage, Component, Entities, Entity, Join, ReadStorage, World,
         WriteStorage,
     },
-    prelude::*,
-    utils::application_root_dir,
+    core::Named,
     Error,
 };
 
@@ -23,6 +17,7 @@ use amethyst_gltf::{GltfPrefab, GltfSceneAsset, GltfSceneFormat, GltfSceneLoader
 
 #[derive(Deserialize, Serialize, PrefabData)]
 pub struct GltfScenePrefabData {
+    pub name: Option<Named>,
     gltf: Option<AssetPrefab<GltfSceneAsset, GltfSceneFormat>>,
 }
 
