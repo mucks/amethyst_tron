@@ -4,16 +4,10 @@ Prefab (
     entities: [
         (
             data: (
-                graphics: (
-                    mesh: Asset(File("mesh/player.obj", ("OBJ", ()))),
-                    material: (
-                        albedo: Generate(Srgba(0.0, 0.0, 1.0, 1.0))
-                    )
-                ),
-                transform: (
-                    scale: (0.2, 0.2, 0.2),
-                )
-            )
+                gltf: File("mesh/player.glb", ()),
+                tag: (),
+            ),
+            
         ),
-    ]
+    ],
 )

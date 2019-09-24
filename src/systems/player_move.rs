@@ -40,7 +40,9 @@ impl<'s> System<'s> for PlayerMoveSystem {
             }
 
             if right_click && !player.right_click_lock {
-                let direction = player.direction.apply_move_event(MoveEvent::RightClick);
+                let direction = player
+                    .direction
+                    .apply_move_event(MoveEvent::RightClick);
                 player.direction = direction;
                 player.right_click_lock = true;
                 player

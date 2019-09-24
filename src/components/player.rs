@@ -1,32 +1,26 @@
 use amethyst::{
-    assets::{PrefabLoader, RonFormat},
-    core::components::Transform,
-    core::math::Vector3,
-    ecs::{Component, DenseVecStorage, Entity},
-    prelude::*,
+    assets::{Handle, Prefab, PrefabLoader, RonFormat},
+    core::{
+        math::Vector3,
+        transform::Transform,
+    },
+    ecs::{
+        storage::DenseVecStorage, Component, Entities, Entity, Join, ReadStorage, World,
+        WriteStorage,
+    },
 };
 
 use crate::enums::Direction;
-use crate::MyPrefabData;
+use crate::prefabs::GltfScenePrefabData;
 
+#[derive(Default)]
 pub struct Player {
+    pub handle: Option<Handle<Prefab<GltfScenePrefabData>>>,
     pub direction: Direction,
     pub left_click_lock: bool,
     pub right_click_lock: bool,
     pub direction_change_positions: Vec<(Vector3<f32>, bool)>,
     pub move_count: usize,
-}
-
-impl Player {
-    pub fn new() -> Player {
-        Player {
-            direction: Direction::Forward,
-            left_click_lock: false,
-            right_click_lock: false,
-            direction_change_positions: Vec::new(),
-            move_count: 0,
-        }
-    }
 }
 
 impl Component for Player {
@@ -35,23 +29,28 @@ impl Component for Player {
 
 impl Player {
     pub fn init(world: &mut World) -> Entity {
-        let handle = world.exec(|loader: PrefabLoader<'_, MyPrefabData>| {
-            loader.load("prefab/player.ron", RonFormat, ())
-        });
+        world.exec(
+            |(loader, mut player_prefabs, mut players, mut transforms, entities): (
+                PrefabLoader<'_, GltfScenePrefabData>,
+                WriteStorage<'_, Handle<Prefab<GltfScenePrefabData>>>,
+                WriteStorage<'_, Player>,
+                WriteStorage<'_, Transform>,
+                Entities<'_>,
+            )| {
+                let mut player = Player::default();
+                player.handle = Some(loader.load("prefab/player.ron", RonFormat, ()));
 
-        let mut transform = Transform::default();
-        transform.set_translation_xyz(0.0, 0.2, 0.0);
+                let mut transform = Transform::default();
+                transform.set_translation_xyz(5.0, 0.2, 5.0);
+                transform.set_scale(Vector3::new(0.2, 0.2, 0.2));
 
-        let mut player = Player::new();
-        player
-            .direction_change_positions
-            .push((transform.translation().clone(), false));
-
-        world
-            .create_entity()
-            .with(handle)
-            .with(player)
-            .with(transform)
-            .build()
+                entities
+                    .build_entity()
+                    .with(player.handle.clone().unwrap(), &mut player_prefabs)
+                    .with(player, &mut players)
+                    .with(transform, &mut transforms)
+                    .build()
+            },
+        )
     }
 }

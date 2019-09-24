@@ -1,5 +1,5 @@
 use amethyst::{
-    assets::{PrefabLoader, PrefabLoaderSystem, RonFormat},
+    assets::{AssetPrefab, PrefabLoader, PrefabLoaderSystem, RonFormat},
     controls::FlyControlBundle,
     core::frame_limiter::FrameRateLimitStrategy,
     core::transform::TransformBundle,
@@ -19,12 +19,15 @@ use std::time::Duration;
 
 mod components;
 mod enums;
+mod prefabs;
 mod systems;
 mod tron;
 
 use crate::tron::Tron;
 
 type MyPrefabData = BasicScenePrefab<(Vec<Position>, Vec<Normal>, Vec<TexCoord>)>;
+
+use amethyst_gltf::{GltfPrefab, GltfSceneAsset, GltfSceneFormat, GltfSceneLoaderSystem};
 
 fn main() -> amethyst::Result<()> {
     amethyst::start_logger(Default::default());
@@ -37,7 +40,6 @@ fn main() -> amethyst::Result<()> {
     let assets_dir = app_root.join("assets/");
 
     let game_data = GameDataBuilder::default()
-        .with(PrefabLoaderSystem::<MyPrefabData>::default(), "", &[])
         .with_bundle(
             FlyControlBundle::<StringBindings>::new(
                 Some(String::from("move_x")),
@@ -46,7 +48,18 @@ fn main() -> amethyst::Result<()> {
             )
             .with_sensitivity(0.1, 0.1),
         )?
-        .with_bundle(TransformBundle::new())?
+        .with_bundle(TransformBundle::new().with_dep(&["fly_movement"]))?
+        .with(PrefabLoaderSystem::<MyPrefabData>::default(), "", &[])
+        .with(
+            PrefabLoaderSystem::<prefabs::GltfScenePrefabData>::default(),
+            "scene_loader",
+            &[],
+        )
+        .with(
+            GltfSceneLoaderSystem::default(),
+            "gltf_loader",
+            &["scene_loader"], // This is important so that entity instantiation is performed in a single frame.
+        )
         .with_bundle(
             InputBundle::<StringBindings>::new().with_bindings_from_file(&key_bindings_path)?,
         )?
@@ -65,7 +78,7 @@ fn main() -> amethyst::Result<()> {
             &["input_system"],
         )
         .with(
-            systems::TrailSystem,
+            systems::TrailSystem::default(),
             "trail_system",
             &["player_move_system"],
         );

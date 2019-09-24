@@ -1,10 +1,23 @@
 use crate::enums::MoveEvent;
 
+use amethyst::{
+    assets::{PrefabData, ProgressCounter},
+    derive::PrefabData,
+    ecs::prelude::*,
+    Error
+};
+use serde::{Serialize, Deserialize};
+
+#[derive(Clone, Copy, Debug, Serialize, Deserialize, PrefabData)]
 pub enum Direction {
     Forward,  //z--
     Backward, //z++
     Left,     //x--
     Right,    //x++
+}
+
+impl Default for Direction {
+    fn default() -> Self { Direction::Forward }
 }
 
 impl Direction {
