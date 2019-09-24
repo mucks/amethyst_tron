@@ -1,9 +1,6 @@
 use amethyst::{
     assets::{Handle, Prefab, PrefabLoader, RonFormat},
-    core::{
-        math::Vector3,
-        transform::Transform,
-    },
+    core::{math::Vector3, transform::Transform},
     ecs::{
         storage::DenseVecStorage, Component, Entities, Entity, Join, ReadStorage, World,
         WriteStorage,
@@ -46,9 +43,9 @@ impl Player {
 
                 entities
                     .build_entity()
+                    .with(transform, &mut transforms)
                     .with(player.handle.clone().unwrap(), &mut player_prefabs)
                     .with(player, &mut players)
-                    .with(transform, &mut transforms)
                     .build()
             },
         )

@@ -7,7 +7,6 @@ Prefab (
                 gltf: File("mesh/cube.glb", ()),
                 tag: (),
             ),
-            
         ),
     ],
 )

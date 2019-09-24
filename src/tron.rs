@@ -1,8 +1,15 @@
 use amethyst::{
-    assets::{AssetStorage, Handle, Loader, PrefabLoader, RonFormat},
+    assets::{
+        AssetStorage, Completion, Handle, Loader, Prefab, PrefabLoader, ProgressCounter, RonFormat,
+    },
     controls::HideCursor,
     core::math::Vector3,
-    ecs::prelude::{Component, DenseVecStorage, Entity},
+    core::transform::Transform,
+    ecs::{
+        Entity,
+        storage::DenseVecStorage, Component, Entities, Join, ReadStorage, World, Write,
+        WriteStorage,
+    },
     input::{is_key_down, is_mouse_button_down},
     prelude::*,
     renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
@@ -15,18 +22,20 @@ use crate::components::FlyCamera;
 use crate::components::Grid;
 use crate::components::Player;
 
+use crate::prefabs::GltfScenePrefabData;
+
 #[derive(Default)]
 pub struct Tron {
-    player_entity: Option<Entity>,
+    progress: Option<ProgressCounter>,
+    entity: Option<Entity>,
 }
 
 impl SimpleState for Tron {
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
         let world = data.world;
-
         world.register::<Cube>();
 
-        self.player_entity = Some(Player::init(world));
+        Player::init(world);
         FlyCamera::init(world);
         Grid::init(world);
     }

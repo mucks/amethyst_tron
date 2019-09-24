@@ -12,8 +12,7 @@ use amethyst::{
 use std::collections::HashMap;
 
 #[derive(Default)]
-pub struct TrailSystem {
-}
+pub struct TrailSystem {}
 
 impl<'s> System<'s> for TrailSystem {
     type SystemData = (
@@ -34,17 +33,10 @@ impl<'s> System<'s> for TrailSystem {
                 if !*has_cube {
                     let mut cube = Cube::new(player.move_count, pos.clone());
                     let mut progress = ProgressCounter::default();
-                    cube.handle = Some(
-                        loader.load(
-                        "prefab/cube.ron",
-                        RonFormat,
-                        &mut progress,
-                    ));
-                    
+                    cube.handle = Some(loader.load("prefab/cube.ron", RonFormat, &mut progress));
                     let mut transform = Transform::default();
                     transform.set_translation(cube.pos);
                     transform.set_scale(Vector3::new(0.05, 0.05, 0.05));
-                    
                     entities
                         .build_entity()
                         .with(transform, &mut transforms)
