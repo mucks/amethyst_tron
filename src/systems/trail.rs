@@ -9,7 +9,7 @@ use amethyst::{
     input::{InputHandler, StringBindings},
 };
 
-use std::collections::HashMap;
+
 
 #[derive(Default)]
 pub struct TrailSystem {}
@@ -27,7 +27,7 @@ impl<'s> System<'s> for TrailSystem {
 
     fn run(
         &mut self,
-        (mut cubes, mut transforms, mut players, loader, mut handles, lazy_update, entities): Self::SystemData,
+        (mut cubes, mut transforms, mut players, loader, mut handles, _lazy_update, entities): Self::SystemData,
     ) {
         for player in (&mut players).join() {
             for (pos, has_cube) in player.direction_change_positions.iter_mut() {

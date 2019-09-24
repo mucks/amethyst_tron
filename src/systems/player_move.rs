@@ -2,7 +2,6 @@ use crate::components::Player;
 use crate::enums::Direction;
 use crate::enums::MoveEvent;
 use amethyst::{
-    assets::{Handle, Prefab, PrefabLoader, RonFormat},
     core::timing::Time,
     core::transform::Transform,
     ecs::prelude::*,

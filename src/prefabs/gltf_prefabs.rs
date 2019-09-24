@@ -5,7 +5,6 @@ use crate::prefabs::GltfScenePrefabData;
 use amethyst::{
     assets::{AssetStorage, Handle, Prefab, PrefabLoader, ProgressCounter, RonFormat},
     ecs::World,
-    ui::{UiLoader, UiPrefab},
     utils::application_root_dir,
 };
 

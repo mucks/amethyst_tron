@@ -22,7 +22,7 @@ use crate::components::FlyCamera;
 use crate::components::Grid;
 use crate::components::Player;
 
-use crate::prefabs::GltfScenePrefabData;
+
 
 #[derive(Default)]
 pub struct Tron {
@@ -40,7 +40,7 @@ impl SimpleState for Tron {
         Grid::init(world);
     }
 
-    fn update(&mut self, data: &mut StateData<'_, GameData<'_, '_>>) -> SimpleTrans {
+    fn update(&mut self, _data: &mut StateData<'_, GameData<'_, '_>>) -> SimpleTrans {
         SimpleTrans::None
     }
 

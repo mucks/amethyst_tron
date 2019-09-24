@@ -27,7 +27,7 @@ use crate::tron::Tron;
 
 type MyPrefabData = BasicScenePrefab<(Vec<Position>, Vec<Normal>, Vec<TexCoord>)>;
 
-use amethyst_gltf::{GltfPrefab, GltfSceneAsset, GltfSceneFormat, GltfSceneLoaderSystem};
+use amethyst_gltf::{GltfSceneLoaderSystem};
 
 fn main() -> amethyst::Result<()> {
     amethyst::start_logger(Default::default());

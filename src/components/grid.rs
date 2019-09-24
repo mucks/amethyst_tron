@@ -1,4 +1,4 @@
-use crate::MyPrefabData;
+
 use amethyst::{
     assets::{PrefabLoader, RonFormat},
     core::math::{Point3, Vector3},

@@ -2,7 +2,7 @@ use amethyst::{
     assets::{Handle, Prefab, PrefabLoader, RonFormat},
     core::{math::Vector3, transform::Transform},
     ecs::{
-        storage::DenseVecStorage, Component, Entities, Entity, Join, ReadStorage, World,
+        storage::DenseVecStorage, Component, Entities, Entity, World,
         WriteStorage,
     },
 };
