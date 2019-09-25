@@ -1,18 +1,18 @@
 use amethyst::{
-    assets::{AssetPrefab, PrefabLoader, PrefabLoaderSystem, RonFormat},
+    assets::PrefabLoaderSystem,
     controls::FlyControlBundle,
     core::frame_limiter::FrameRateLimitStrategy,
     core::transform::TransformBundle,
-    ecs::prelude::{ReadExpect, Resources, SystemData},
     input::{InputBundle, StringBindings},
     prelude::*,
     renderer::{
         plugins::{RenderShaded3D, RenderToWindow},
         rendy::mesh::{Normal, Position, TexCoord},
+        shape::Shape,
         types::DefaultBackend,
         RenderDebugLines, RenderingBundle,
     },
-    utils::{application_root_dir, scene::BasicScenePrefab},
+    utils::{application_root_dir, fps_counter::FpsCounterBundle, scene::BasicScenePrefab},
 };
 
 use std::time::Duration;
@@ -27,7 +27,7 @@ use crate::tron::Tron;
 
 type MyPrefabData = BasicScenePrefab<(Vec<Position>, Vec<Normal>, Vec<TexCoord>)>;
 
-use amethyst_gltf::{GltfSceneLoaderSystem};
+use amethyst_gltf::GltfSceneLoaderSystem;
 
 fn main() -> amethyst::Result<()> {
     amethyst::start_logger(Default::default());
@@ -63,6 +63,7 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(
             InputBundle::<StringBindings>::new().with_bindings_from_file(&key_bindings_path)?,
         )?
+        .with_bundle(FpsCounterBundle::default())?
         .with_bundle(
             RenderingBundle::<DefaultBackend>::new()
                 .with_plugin(

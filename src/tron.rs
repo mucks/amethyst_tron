@@ -1,19 +1,8 @@
 use amethyst::{
-    assets::{
-        AssetStorage, Completion, Handle, Loader, Prefab, PrefabLoader, ProgressCounter, RonFormat,
-    },
+    assets::ProgressCounter,
     controls::HideCursor,
-    core::math::Vector3,
-    core::transform::Transform,
-    ecs::{
-        Entity,
-        storage::DenseVecStorage, Component, Entities, Join, ReadStorage, World, Write,
-        WriteStorage,
-    },
     input::{is_key_down, is_mouse_button_down},
     prelude::*,
-    renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
-    ui::{Anchor, TtfFormat, UiText, UiTransform},
     winit::{MouseButton, VirtualKeyCode},
 };
 
@@ -21,13 +10,14 @@ use crate::components::Cube;
 use crate::components::FlyCamera;
 use crate::components::Grid;
 use crate::components::Player;
+use crate::components::Trail;
 
-
+use crate::prefabs::gltf_prefabs::{init_prefabs, update_prefabs};
 
 #[derive(Default)]
 pub struct Tron {
-    progress: Option<ProgressCounter>,
-    entity: Option<Entity>,
+    prefab_loading_progress: Option<ProgressCounter>,
+    player_exists: bool,
 }
 
 impl SimpleState for Tron {
@@ -35,12 +25,26 @@ impl SimpleState for Tron {
         let world = data.world;
         world.register::<Cube>();
 
-        Player::init(world);
+        self.player_exists = false;
+        self.prefab_loading_progress = Some(init_prefabs(world));
+
+        Trail::draw(world);
         FlyCamera::init(world);
         Grid::init(world);
     }
 
-    fn update(&mut self, _data: &mut StateData<'_, GameData<'_, '_>>) -> SimpleTrans {
+    fn update(&mut self, data: &mut StateData<'_, GameData<'_, '_>>) -> SimpleTrans {
+        if let Some(ref counter) = self.prefab_loading_progress.as_ref() {
+            if counter.is_complete() {
+                self.prefab_loading_progress = None;
+                update_prefabs(&mut data.world);
+
+                if !self.player_exists {
+                    Player::init(&mut data.world);
+                    self.player_exists = true;
+                }
+            }
+        }
         SimpleTrans::None
     }
 

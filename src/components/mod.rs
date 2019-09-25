@@ -6,3 +6,5 @@ mod grid;
 pub use grid::Grid;
 mod cube;
 pub use cube::Cube;
+mod trail;
+pub use trail::Trail;

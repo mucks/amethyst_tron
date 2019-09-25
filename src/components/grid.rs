@@ -1,10 +1,6 @@
-
 use amethyst::{
-    assets::{PrefabLoader, RonFormat},
     core::math::{Point3, Vector3},
     ecs::prelude::*,
-    ecs::{Component, DenseVecStorage},
-    prelude::*,
     renderer::{
         debug_drawing::{DebugLines, DebugLinesComponent, DebugLinesParams},
         palette::Srgba,
@@ -15,6 +11,8 @@ pub struct Grid;
 
 impl Grid {
     pub fn init(world: &mut World) {
+        let offset = 10_000.0;
+
         world.add_resource(DebugLines::new());
         world.add_resource(DebugLinesParams { line_width: 2.0 });
 
@@ -43,7 +41,7 @@ impl Grid {
         for x in 0..=width {
             let (x, width, depth) = (x as f32, width as f32, depth as f32);
 
-            let position = Point3::new(x - width / 2.0, 0.0, -depth / 2.0);
+            let position = Point3::new(x - width / 2.0, offset, -depth / 2.0);
             let direction = Vector3::new(0.0, 0.0, depth);
 
             debug_lines_component.add_direction(position, direction, main_color);
@@ -66,7 +64,7 @@ impl Grid {
         for z in 0..=depth {
             let (z, width, depth) = (z as f32, width as f32, depth as f32);
 
-            let position = Point3::new(-width / 2.0, 0.0, z - depth / 2.0);
+            let position = Point3::new(-width / 2.0, offset, z - depth / 2.0);
             let direction = Vector3::new(width, 0.0, 0.0);
 
             debug_lines_component.add_direction(position, direction, main_color);

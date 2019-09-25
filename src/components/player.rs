@@ -1,18 +1,15 @@
 use amethyst::{
-    assets::{Handle, Prefab, PrefabLoader, RonFormat},
     core::{math::Vector3, transform::Transform},
     ecs::{
-        storage::DenseVecStorage, Component, Entities, Entity, World,
-        WriteStorage,
+        storage::DenseVecStorage, Component, Entities, LazyUpdate, Read, World, Write, WriteStorage,
     },
 };
 
 use crate::enums::Direction;
-use crate::prefabs::GltfScenePrefabData;
+use crate::prefabs::gltf_prefabs::GltfScenePrefabs;
 
 #[derive(Default)]
 pub struct Player {
-    pub handle: Option<Handle<Prefab<GltfScenePrefabData>>>,
     pub direction: Direction,
     pub left_click_lock: bool,
     pub right_click_lock: bool,
@@ -25,28 +22,30 @@ impl Component for Player {
 }
 
 impl Player {
-    pub fn init(world: &mut World) -> Entity {
+    pub fn init(world: &mut World) {
         world.exec(
-            |(loader, mut player_prefabs, mut players, mut transforms, entities): (
-                PrefabLoader<'_, GltfScenePrefabData>,
-                WriteStorage<'_, Handle<Prefab<GltfScenePrefabData>>>,
-                WriteStorage<'_, Player>,
+            |(prefabs, mut transforms, mut players, lazy_update, entities): (
+                Read<'_, GltfScenePrefabs>,
                 WriteStorage<'_, Transform>,
+                WriteStorage<'_, Player>,
+                Write<'_, LazyUpdate>,
                 Entities<'_>,
             )| {
-                let mut player = Player::default();
-                player.handle = Some(loader.load("prefab/player.ron", RonFormat, ()));
+                let player = Player::default();
 
                 let mut transform = Transform::default();
-                transform.set_translation_xyz(5.0, 0.2, 5.0);
+                transform.set_translation_xyz(0.0, 10000.2, 0.0);
                 transform.set_scale(Vector3::new(0.2, 0.2, 0.2));
 
-                entities
+                let entity = entities
                     .build_entity()
                     .with(transform, &mut transforms)
-                    .with(player.handle.clone().unwrap(), &mut player_prefabs)
                     .with(player, &mut players)
-                    .build()
+                    .build();
+
+                if let Some(player_prefab) = prefabs.get_prefab("player") {
+                    lazy_update.insert(entity, player_prefab.clone());
+                }
             },
         )
     }

@@ -4,6 +4,9 @@ Prefab (
     entities: [
         (
             data: (
+                name: (
+                    name: "player",
+                ),
                 gltf: File("mesh/player.glb", ()),
                 tag: (),
             ),

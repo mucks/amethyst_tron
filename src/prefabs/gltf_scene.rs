@@ -1,19 +1,13 @@
 use amethyst::{
-    assets::{
-        AssetPrefab, AssetStorage, Handle, Prefab, PrefabData, PrefabLoader, PrefabLoaderSystem,
-        ProgressCounter, RonFormat,
-    },
-    derive::PrefabData,
-    ecs::{
-        storage::DenseVecStorage, Component, Entities, Entity, Join, ReadStorage, World,
-        WriteStorage,
-    },
+    assets::{AssetPrefab, PrefabData, ProgressCounter},
     core::Named,
+    derive::PrefabData,
+    ecs::{storage::DenseVecStorage, Component, Entity},
     Error,
 };
 
+use amethyst_gltf::{GltfSceneAsset, GltfSceneFormat};
 use serde::{Deserialize, Serialize};
-use amethyst_gltf::{GltfPrefab, GltfSceneAsset, GltfSceneFormat, GltfSceneLoaderSystem};
 
 #[derive(Deserialize, Serialize, PrefabData)]
 pub struct GltfScenePrefabData {

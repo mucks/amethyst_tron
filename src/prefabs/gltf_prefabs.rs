@@ -22,8 +22,8 @@ impl GltfScenePrefabs {
         self.prefabs.insert(creature_type, prefab_handle);
     }
 
-    pub fn get_prefab(&self, creature_type: &str) -> Option<&Handle<Prefab<GltfScenePrefabData>>> {
-        self.prefabs.get(creature_type)
+    pub fn get_prefab(&self, gltf_scene: &str) -> Option<&Handle<Prefab<GltfScenePrefabData>>> {
+        self.prefabs.get(gltf_scene)
     }
 
     pub fn get_prefabs(&self) -> &HashMap<String, Handle<Prefab<GltfScenePrefabData>>> {
@@ -45,7 +45,10 @@ pub fn init_prefabs(world: &mut World) -> ProgressCounter {
     let mut progress_counter = ProgressCounter::new();
     let prefab_iter = {
         let prefab_dir_path = application_root_dir()
-            .unwrap().join("resources").join("prefabs").join("gltf_scenes");
+            .unwrap()
+            .join("assets")
+            .join("prefabs")
+            .join("gltf_scenes");
         let prefab_iter = read_dir(prefab_dir_path).unwrap();
         prefab_iter.map(|prefab_dir_entry| {
             world.exec(|loader: PrefabLoader<'_, GltfScenePrefabData>| {

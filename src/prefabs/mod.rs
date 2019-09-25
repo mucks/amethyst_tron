@@ -1,3 +1,3 @@
 mod gltf_scene;
 pub use gltf_scene::GltfScenePrefabData;
-mod gltf_prefabs;
+pub mod gltf_prefabs;
